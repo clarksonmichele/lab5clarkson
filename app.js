@@ -8,10 +8,10 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 //authorization packages
-var passport = require('passport');
-var session = require('express-session');
-var flash require('connect-flash');
-var localStrategy = require('passport-local').Strategy;
+//var passport = require('passport');
+//var session = require('express-session');
+//var flash require('connect-flash');
+//var localStrategy = require('passport-local').Strategy;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
