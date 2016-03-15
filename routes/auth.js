@@ -15,6 +15,5 @@ router.get('/login', function(req, res, next) {
 	});
 });
 
-
 //Make the file public
 module.exports = router;
