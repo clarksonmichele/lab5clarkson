@@ -13,13 +13,10 @@ passport.serialUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    Account.findById(id, function(err, user) {
         done(err, user);
-    });
 });
 
 //tell passport to use gitHub
-
 passport.use(new gitHub({
     clientID: configDb.githubClientId,
     clientSecret: configDb.githubClientSecret,
@@ -30,9 +27,9 @@ passport.use(new gitHub({
         /*var updates = {
             name: profile.displayName,
             someID: profile.id
-        };
+        };*/
 
-        var options = { upsert: true };
+        /*var options = { upsert: true };
 
         Account.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
             if (err) {
@@ -44,6 +41,17 @@ passport.use(new gitHub({
         });*/
     }
 ));
+
+// GET github login
+router.get('/github', passport.authenticate('github', { scope: ['user.email'] }));
+
+// GET github callback
+router.get('/github/callback', passport.authenticate('github', {
+    failureRedirect: '/auth/login'}),
+    function(req, res) {
+        res.redirect('/articles');
+    }
+);
 
 //GET register and display the form
 router.get('/register', function(req, res, next) {
@@ -92,4 +100,4 @@ router.post('/login', passport.authenticate('local', {
 }));
 
 //Make the file public
-module.exports = router;
+module.exports = router, passport;
