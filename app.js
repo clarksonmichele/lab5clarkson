@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 //authorization packages
 var passport = require('passport');
 var session = require('express-session');
-var flash require('connect-flash');
+var flash = require('connect-flash');
 var localStrategy = require('passport-local').Strategy;
 
 var routes = require('./routes/index');
@@ -31,6 +31,28 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//enable flash for showing messages
+app.use(flash());
+
+//passport config section
+app.use(session({
+  secret: 'lab5 auth',
+  resave: true,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//use the Account model we built
+var Account = require('./models/account');
+passport.use(Account.createStrategy());
+passport.use(new localStrategy(Account.authenticate()));
+
+//methods for accessing the session data
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 app.use('/', routes);
 app.use('/users', users);
