@@ -8,5 +8,5 @@ module.exports = {
     'url': 'mongodb://mclarkson:1234qwer@ds064748.mlab.com:64748/lab5',
     'githubClientId': '3a718580f0c8a4aeff11',
     'githubClientSecret': '266bb025a1db2e247b85c74f10c1b3936d8d31b4',
-    'githubCallbackUrl': 'http://localhost:3000/auth/github/callback';
+    'githubCallbackUrl': 'https://lab5clarkson.herokuapp.com/auth/github/callback';
 };
