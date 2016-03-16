@@ -5,6 +5,45 @@ var router = express.Router();
 var passport = require('passport');
 var mongoose = require('mongoose');
 var Account = require('../models/account');
+var gitHub = require('passport-github2');
+var configDb = require('../config/db.js');
+
+passport.serialUser(function(user, done) {
+	done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    Account.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
+//tell passport to use gitHub
+
+passport.use(new gitHub({
+    clientID: configDb.githubClientId,
+    clientSecret: configDb.githubClientSecret,
+    callbackURL: configDb.githubCallbackUrl
+}, function(accessToken, refreshToken, profile, done) {
+        var searchQuery = { name: profile.displayName };
+
+        /*var updates = {
+            name: profile.displayName,
+            someID: profile.id
+        };
+
+        var options = { upsert: true };
+
+        Account.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
+            if (err) {
+                return done(err);
+            }
+            else {
+                return done(null, user);
+            }
+        });*/
+    }
+));
 
 //GET register and display the form
 router.get('/register', function(req, res, next) {
@@ -29,7 +68,7 @@ router.post('/register', function(req, res, next) {
 
 //GET login and display the form
 router.get('/login', function(req, res, next) {
-	
+
     // store the session messages in a local variable
     var messages = req.session.messages || [];
 
