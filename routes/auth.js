@@ -29,15 +29,21 @@ router.post('/register', function(req, res, next) {
 
 //GET login and display the form
 router.get('/login', function(req, res, next) {
-	res.render('auth/login', {
-		title: 'Login',
-		user: req.user,
-		massages: req.sesssion.messages || []
-	});
+	
+    // store the session messages in a local variable
+    var messages = req.session.messages || [];
 
-	//clear out session messages so they don't just build up 
-	req.session.messages = [];
+    // clear the session messages
+    req.session.messages = [];
+
+    // show the login page and pass in any messages we may have
+    res.render('auth/login', {
+        title: 'Login',
+        user: req.user,
+        messages: messages
+    });
 });
+
 
 //POST login - validate the user and send them to articles or back to login
 router.post('/login', passport.authenticate('local', {
